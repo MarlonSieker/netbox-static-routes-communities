@@ -45,7 +45,8 @@ class DeviceStaticRouteView(PermissionRequiredMixin, View):
     def get(self, request, pk):
         device = get_object_or_404(Device, pk=pk)
         routes = StaticRoute.objects.filter(device=device)
-        table = StaticRouteTable(routes, user=request.user)
+        table = StaticRouteTable(routes)
+        table.configure(request)
 
         return render(
             request,
@@ -84,7 +85,8 @@ class PrefixRoutedByView(PermissionRequiredMixin, View):
             target_id=prefix.pk
         ).select_related("device")
 
-        table = StaticRouteTable(routes, user=request.user)
+        table = StaticRouteTable(routes)
+        table.configure(request)
 
         return render(
             request,
@@ -123,7 +125,8 @@ class AggregateRoutedByView(PermissionRequiredMixin, View):
             target_id=aggregate.pk
         ).select_related("device")
 
-        table = StaticRouteTable(routes, user=request.user)
+        table = StaticRouteTable(routes)
+        table.configure(request)
 
         return render(
             request,
